@@ -1,4 +1,5 @@
 from django.http import HttpResponse
+from raspibackup.models import Client
 import subprocess
 import datetime
 from thread import start_new_thread
@@ -12,22 +13,19 @@ lns_command = 'ln -s '
 
 
 def backup(request):
-    host = request.GET.get('host')
-    backup_root_dir = request.GET.get('backup_root_dir')
-    remote_backup_dir = request.GET.get('remote_backup_dir')
-    remote_user = request.GET.get('remote_user')
-    remote_host = request.GET.get('remote_host')
+    client = request.GET.get('client')
+    start_new_thread(do_linux_backup, (client,))
 
-    start_new_thread(do_linux_backup, (backup_root_dir, host, remote_backup_dir, remote_user, remote_host,))
     html = "<html><body>Backup successfully started!</body></html>"
     return HttpResponse(html)    
 
-def do_linux_backup(backup_root_dir, host, remote_backup_dir, remote_user, remote_host):
+def do_linux_backup(client_param):
+    client = Client.objects.get(host = client_param)
     now = datetime.datetime.now()
     timestamp = now.strftime("%Y-%m-%d_%H:%M:%S")
-    host_backup_root_dir = backup_root_dir + host + "/"
+    host_backup_root_dir = client.backup_root_dir + client.host + "/"
 
-    subprocess.check_output( rsync_command + host_backup_root_dir + link_to_latest_backup + ssh_command + remote_user + '@' + remote_host + ':' + remote_backup_dir + ' ' + host_backup_root_dir + backup_folder_prefix + timestamp, shell=True)
+    subprocess.check_output( rsync_command + host_backup_root_dir + link_to_latest_backup + ssh_command + client.remote_user + '@' + client.remote_host + ':' + client.remote_backup_dir + ' ' + host_backup_root_dir + backup_folder_prefix + timestamp, shell=True)
     subprocess.check_output(rm_command + host_backup_root_dir + link_to_latest_backup, shell=True)
     subprocess.check_output(lns_command  + host_backup_root_dir + backup_folder_prefix + timestamp + ' ' + host_backup_root_dir + link_to_latest_backup, shell=True)
         
