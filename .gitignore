@@ -2,3 +2,10 @@
 *.pot
 *.pyc
 local_settings.py
+
+# Local database
+sqlite.db
+
+# IDE project files
+.pydevproject
+.project
