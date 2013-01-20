@@ -14,5 +14,9 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
      url(r'^admin/', include(admin.site.urls)),
-     url(r'^backup/', 'raspibackup.views.backup'),
+     url(r'^newbackup/', 'raspibackup.views.new_backup'),
+     url(r'^backups/', 'raspibackup.views.backups_overview'),
+     url(r'^show_log/', 'raspibackup.views.show_log'),
+     url(r'^clients/', 'raspibackup.views.clients_overview'),
+     url(r'^$', 'raspibackup.views.index'),
 )

@@ -1,0 +1,25 @@
+{% extends 'template.html' %}
+{% block content %}
+
+{% if clients %}
+	<table>
+		<tr>
+			<td id="header">Client</td>
+			<td id="header">Backup Root Dir</td>
+			<td id="header">Remote Backup Dir</td>
+			<td id="header">Remote User</td>
+			<td id="header">Remote Host</td>
+		</tr>
+		{%for client in clients %}
+		<tr>
+			<td id="content">{{client.client_name}}</td>
+			<td id="content">{{client.backup_root_dir}}</td>
+			<td id="content">{{client.remote_backup_dir}}</td>
+			<td id="content">{{client.remote_user}}</td>
+			<td id="content">{{client.remote_host}}</td>
+		</tr>
+		{% endfor %}
+	</table>
+{% endif %}
+
+{% endblock %}

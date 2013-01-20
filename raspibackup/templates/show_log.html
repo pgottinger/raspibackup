@@ -1,0 +1,10 @@
+{% extends 'template.html' %}
+{% block content %}
+
+Logfile for backup {{backup.backup_id}}
+<br/><br/>
+{%for line in file_content %}
+	{{line}}<br/>
+{% endfor %}
+
+{% endblock %}

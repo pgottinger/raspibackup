@@ -1,6 +1,7 @@
 import subprocess
 import datetime
 from django.http import HttpResponse
+from django.shortcuts import render_to_response
 from raspibackup.models import Client, Backup
 from thread import start_new_thread
 from subprocess import CalledProcessError
@@ -8,14 +9,47 @@ from subprocess import CalledProcessError
 link_to_latest_backup = "current"
 backup_folder_prefix = "backup_"
 backup_log_filename = "backup.log"
-rsync_command = "rsync -avz --link-dest="
+rsync_command = "rsync -avz --stats --link-dest="
 ssh_command = " -e ssh "
 rm_command = "rm "
 lns_command = "ln -s "
 mkdir_command = "mkdir "
 
 
-def backup(request):
+def index(request):
+    return render_to_response('index.html')
+
+def backups_overview(request):
+    context = {    
+               'backups': Backup.objects.all(),
+    }
+    return render_to_response('backups_overview.html', context)    
+
+def clients_overview(request):
+    context = {    
+               'clients': Client.objects.all(),
+    }
+    return render_to_response('clients_overview.html', context)  
+
+def show_log(request):
+    backup_id = request.GET.get('backup_id');
+    backup = Backup.objects.get(backup_id = backup_id)
+    f = open(backup.backup_log_path, 'r')
+    file_content = []
+
+    for line in f:
+        file_content.append(line)
+    
+    f.close()
+    context = {
+               'file_content': file_content,
+               'backup': backup,
+               }
+    
+    return render_to_response('show_log.html', context)
+
+
+def new_backup(request):
     client_param = request.GET.get('client')
     client = Client.objects.get(client_name=client_param)
     if client is None:
