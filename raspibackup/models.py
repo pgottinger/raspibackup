@@ -13,5 +13,7 @@ class Backup(models.Model):
     client = models.ForeignKey(Client)
     backup_start_time = models.DateTimeField(null=False)
     backup_end_time = models.DateTimeField(null=True)
-    backup_path = models.CharField(max_length=255, null=True)
+    backup_path = models.CharField(max_length=1024, null=True)
+    backup_log_path = models.CharField(max_length=1024, null=True)
+    backup_successful = models.NullBooleanField()
     

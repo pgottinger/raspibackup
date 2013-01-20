@@ -6,6 +6,8 @@ local_settings.py
 # Local database
 sqlite.db
 
+manage.py
+
 # IDE project files
 .pydevproject
 .project
