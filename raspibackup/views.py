@@ -1,6 +1,5 @@
 import subprocess
 import datetime
-from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from raspibackup.models import Client, Backup
 from thread import start_new_thread
@@ -52,14 +51,10 @@ def show_log(request):
 def new_backup(request):
     client_param = request.GET.get('client')
     client = Client.objects.get(client_name=client_param)
-    if client is None:
-        html="<html><body>Client is not known!</body></html>"
-    else:
-        start_new_thread(do_linux_backup, (client,))
+    start_new_thread(do_linux_backup, (client,))
         
-        html = "<html><body>Backup successfully started!</body></html>"
     
-    return HttpResponse(html)    
+    return render_to_response('newbackup.html')    
 
 def do_linux_backup(client):
     now = datetime.datetime.now()
@@ -95,4 +90,16 @@ def do_linux_backup(client):
     # write the back end time to the database to show that the backup is finished 
     backup.backup_end_time = datetime.datetime.now()
     backup.save()
+
+def delete_backup(request):
+    backup_id = request.GET.get('backup_id');
+    backup = Backup.objects.get(backup_id = backup_id)
+    subprocess.check_output('rm -rf '+backup.backup_path, shell=True)
+    
+    backup.delete()
+    
+    context = {
+               'backup_id': backup_id,
+               }
+    return render_to_response('backup_deleted.html', context)
         

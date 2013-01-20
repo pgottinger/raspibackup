@@ -9,6 +9,7 @@
 			<td id="header">Remote Backup Dir</td>
 			<td id="header">Remote User</td>
 			<td id="header">Remote Host</td>
+			<td id="header">Backup</td>
 		</tr>
 		{%for client in clients %}
 		<tr>
@@ -17,6 +18,7 @@
 			<td id="content">{{client.remote_backup_dir}}</td>
 			<td id="content">{{client.remote_user}}</td>
 			<td id="content">{{client.remote_host}}</td>
+			<td id="content"><a href="/newbackup/?client={{client.client_name}}">Go</a></td>
 		</tr>
 		{% endfor %}
 	</table>

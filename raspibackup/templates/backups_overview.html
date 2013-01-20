@@ -11,6 +11,7 @@
 			<td id="header">Path</td>
 			<td id="header">Log File</td>
 			<td id="header">Success</td>
+			<td id="header">Delete</td>
 		</tr>
 		{%for backup in backups %}
 		<tr>
@@ -21,6 +22,7 @@
 			<td id="content">{{backup.backup_path}}</td>
 			<td id="content"><a href="/show_log/?backup_id={{backup.backup_id}}">show</a></td>
 			<td id="content">{{backup.backup_successful}}</td>
+			<td id="content"><a href="/deletebackup/?backup_id={{backup.backup_id}}">Go</a></td>
 		</tr>
 		{% endfor %}
 	</table>
