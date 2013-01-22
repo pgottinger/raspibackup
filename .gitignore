@@ -14,4 +14,4 @@ settings.py
 .project
 
 # docs
-docs/build
+docs/_build
