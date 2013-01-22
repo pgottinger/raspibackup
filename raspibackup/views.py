@@ -40,6 +40,8 @@ def show_log(request):
         file_content.append(line)
     
     f.close()
+    
+    file_content = file_content[-100:]
     context = {
                'file_content': file_content,
                'backup': backup,
@@ -51,8 +53,12 @@ def show_log(request):
 def new_backup(request):
     client_param = request.GET.get('client')
     client = Client.objects.get(client_name=client_param)
-    start_new_thread(do_linux_backup, (client,))
-        
+    threaded_param = request.GET.get('threaded')
+    
+    if threaded_param == "true":
+        do_linux_backup(client)    
+    else:
+        start_new_thread(do_linux_backup, (client,))
     
     return render_to_response('newbackup.html')    
 
@@ -86,6 +92,7 @@ def do_linux_backup(client):
         backup.backup_successful = True
     except CalledProcessError:
         backup.backup_successful = False
+        raise
         
     # write the back end time to the database to show that the backup is finished 
     backup.backup_end_time = datetime.datetime.now()
