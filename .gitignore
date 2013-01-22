@@ -6,6 +6,7 @@ local_settings.py
 # Local database
 sqlite.db
 
+# django files
 manage.py
 settings.py
 
