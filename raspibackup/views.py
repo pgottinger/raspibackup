@@ -55,7 +55,7 @@ def new_backup(request):
     client = Client.objects.get(client_name=client_param)
     threaded_param = request.GET.get('threaded')
     
-    if threaded_param == "true":
+    if threaded_param == "false":
         do_linux_backup(client)    
     else:
         start_new_thread(do_linux_backup, (client,))
