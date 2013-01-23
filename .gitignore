@@ -13,6 +13,7 @@ settings.py
 # IDE project files
 .pydevproject
 .project
+.settings
 
 # docs
 docs/_build
