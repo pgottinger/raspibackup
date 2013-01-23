@@ -17,3 +17,8 @@ settings.py
 
 # docs
 docs/_build
+
+# build
+RaspiBackup.egg-info
+dist
+build
